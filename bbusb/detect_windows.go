@@ -72,11 +72,13 @@ type DeviceInfo struct {
 	FriendlyName string
 }
 
-// IsBitBabblerConnected checks if any BitBabbler device (VID 0x0403, PID 0x7840) is present.
+// IsBitBabblerConnected returns whether a BitBabbler device (VID 0x0403, PID 0x7840)
+// is present and a slice of device infos.
 //
-// It scans present USB device interfaces via Windows SetupAPI and inspects their
-// hardware IDs for a match. It returns a list of matching devices and a boolean
-// indicating if at least one was found.
+// Windows implementation notes:
+// - Enumerates present USB device interfaces via SetupAPI
+// - Matches devices by VID/PID using hardware IDs and device paths
+// - Populates friendly name and path when available
 func IsBitBabblerConnected() (bool, []DeviceInfo, error) {
 	devices, err := listUsbDevicesMatchingVIDPID(0x0403, 0x7840)
 	if err != nil {

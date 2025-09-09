@@ -64,6 +64,13 @@ const (
 )
 
 // DeviceSession encapsulates an open BitBabbler FTDI device via gousb.
+//
+// Usage:
+//
+//	s, _ := OpenBitBabbler(2_500_000, 1)
+//	defer s.Close()
+//	buf := make([]byte, 4096)
+//	_, _ = s.ReadRandom(context.Background(), buf)
 type DeviceSession struct {
 	ctx       *gousb.Context
 	dev       *gousb.Device

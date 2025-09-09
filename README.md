@@ -83,6 +83,21 @@ _, err = sess.ReadRandom(context.Background(), buf)
 - `ReadRandom(ctx, buf []byte)`
   - Issues an MPSSE read for `len(buf)` bytes and strips the FTDI 2-byte status from each USB packet, returning pure data bytes.
 
+### GUI-friendly helpers
+```go
+present, list, err := bbusb.IsPresent()
+
+// One-shot bits (returns exactly N bits, last byte masked)
+data, err := bbusb.ReadBitsOnce(ctx, 2048, 2_500_000, 1)
+
+// Periodic collector
+ch, err := bbusb.StartBitCollector(ctx, 1024, time.Second, 2_500_000, 1)
+for r := range ch {
+    if r.Err != nil { /* handle */ }
+    _ = r.Data // 1024 bits (128 bytes)
+}
+```
+
 ## Troubleshooting
 - "No BitBabbler devices found":
   - Check the USB connection and cable.
